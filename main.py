@@ -1,6 +1,9 @@
 import pandas as pd 
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.stats import linregress
+
+from nuages import *
 
 client = pd.read_csv('csv/base_comptoir_espace_table_clients.csv',sep=';')
 entreprise = pd.read_csv('csv/base_comptoir_espace_table_decisions_entreprises.csv',sep=';')
@@ -41,15 +44,34 @@ mergeEntreprise2["CA2"] = mergeEntreprise2["Choix2"]*mergeEntreprise2["ENT_PRIX"
 #Additionner les chiffres d'affaires par entreprise
 CA1 = mergeEntreprise1.groupby(["ENT_ID","ENT_ANNEE"])["CA1"].sum()
 CA2 = mergeEntreprise2.groupby(["ENT_ID","ENT_ANNEE"])["CA2"].sum()
-print(CA1)
-print(CA2)
+# print(CA1)
+# print(CA2)
 
 #Faire un graphique en barre des deux années
 CA = pd.merge(CA1.rename('CA1'),CA2.rename('CA2'),how= 'left' , left_on=["ENT_ID"],right_on=["ENT_ID"])
-print(CA)
-ca = CA.plot(kind='bar', title ="Chiffre d'affaires par entreprise", figsize=(15, 10), legend=True, fontsize=12)
-ca.set_xlabel("Entreprise", fontsize=12)
-ca.set_yticks(np.arange(0, 200000, 1600000))
-ca.set_ylabel("Chiffre d'affaires", fontsize=12)
+# print(CA)
+# ca = CA.plot(kind='bar', title ="Chiffre d'affaires par entreprise", figsize=(15, 10), legend=True, fontsize=12)
+# ca.set_xlabel("Entreprise", fontsize=12)
+# ca.set_ylabel("Chiffre d'affaires", fontsize=12)
 
-plt.show()
+# plt.show()
+# print(prixProd1)
+
+# cliProd1 = client[(client['CLI_CHOIX']>0)&(client['CLI_PROD']==1)]["CLI_PRIX"].value_counts()
+# GraphBar = cliProd1.plot(kind='bar', title ="Chiffre d'affaires par entreprise", figsize=(15, 10), legend=True, fontsize=12)
+# GraphBar.set_xlabel("Entreprise", fontsize=12)
+# GraphBar.set_ylabel("Chiffre d'affaires", fontsize=12)
+# plt.yticks(np.arange(0, 350, 50))
+# plt.xticks(np.arange(0,17500,2500))
+# plt.show()
+
+# print(cliProd1)
+
+
+
+
+
+nuage(1,2)
+
+
+
