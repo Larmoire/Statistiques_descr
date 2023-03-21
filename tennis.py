@@ -40,7 +40,7 @@ def player(id):
     plt.show()
 
 def nuagetennis():
-    joueurheight = joueurs[(joueurs['height_cm']>6.5)][['player_id','height_cm']]
+    joueurheight = joueurs[(joueurs['height_cm']>140)][['player_id','height_cm']]
     ServReussis = stats[(stats['winner_first_serve_points_won']<=stats['winner_first_serves_in'])&(stats['loser_first_serve_points_won']<=stats['loser_first_serves_in'])&(stats['winner_first_serves_in']>0)&(stats['loser_first_serves_in']>0)][['match_id','winner_first_serve_points_won','loser_first_serve_points_won','winner_first_serves_in','loser_first_serves_in']]
     winners = scores.merge(ServReussis, on='match_id', how='inner')
     losers = scores.merge(ServReussis, on='match_id', how='inner')
@@ -53,9 +53,9 @@ def nuagetennis():
     general['first_serve_points_won'] = (general['winner_first_serve_points_won']+general['loser_first_serve_points_won'])/(general['winner_first_serves_in']+general['loser_first_serves_in'])
     #Enlever les NaN
     general = general.dropna()
-    print(general)
-    plt.scatter(general['height_cm'],general['first_serve_points_won'],s=1)
+    plt.scatter(general['height_cm'],general['first_serve_points_won'])
     plt.title("Nuage de points des joueurs en fonction de leur taille et du nombre de points gagnés sur leur premier service")
     plt.xlabel("Taille en cm")
     plt.ylabel("Nombre de points gagnés sur le premier service")
-    plt.show()
+    print(general['height_cm'].min())
+    # plt.show()
