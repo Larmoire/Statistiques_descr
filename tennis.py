@@ -1,7 +1,6 @@
 import pandas as pd 
 import matplotlib.pyplot as plt
 import numpy as np
-import datetime
 
 joueurs = pd.read_csv('csv/data_tennis/data_players.csv',sep=',')
 tournois = pd.read_csv('csv/data_tennis/tournaments.csv',sep=',')
@@ -42,16 +41,16 @@ def player(id):
 
 def nuagetennis():
     joueurheight = joueurs[(joueurs['height_cm']>6.5)][['player_id','height_cm']]
-    ServReussis = stats[(stats['winner_first_serve_points_won']<=stats['winner_first_serves_in'])&(stats['loser_first_serve_points_won']<=stats['loser_first_serves_in'])&(stats['winner_first_serves_in']>0)&(stats['loser_first_serves_in']>0)][['match_id','winner_first_serve_points_won','loser_first_serve_points_won']]
+    ServReussis = stats[(stats['winner_first_serve_points_won']<=stats['winner_first_serves_in'])&(stats['loser_first_serve_points_won']<=stats['loser_first_serves_in'])&(stats['winner_first_serves_in']>0)&(stats['loser_first_serves_in']>0)][['match_id','winner_first_serve_points_won','loser_first_serve_points_won','winner_first_serves_in','loser_first_serves_in']]
     winners = scores.merge(ServReussis, on='match_id', how='inner')
     losers = scores.merge(ServReussis, on='match_id', how='inner')
     winners = winners.merge(joueurheight, left_on='winner_player_id', right_on='player_id', how='inner')
     losers = losers.merge(joueurheight, left_on='loser_player_id', right_on='player_id', how='inner')
-    winnerheight = winners[['player_id','height_cm','winner_first_serve_points_won']]
-    loserheight = losers[['player_id','height_cm','loser_first_serve_points_won']]
+    winnerheight = winners[['player_id','height_cm','winner_first_serve_points_won','winner_first_serves_in']]
+    loserheight = losers[['player_id','height_cm','loser_first_serve_points_won','loser_first_serves_in']]
     general = pd.concat([winnerheight,loserheight])
     general = general.groupby('player_id').mean()
-    general['first_serve_points_won'] = general['winner_first_serve_points_won']+general['loser_first_serve_points_won']
+    general['first_serve_points_won'] = (general['winner_first_serve_points_won']+general['loser_first_serve_points_won'])/(general['winner_first_serves_in']+general['loser_first_serves_in'])
     #Enlever les NaN
     general = general.dropna()
     print(general)
@@ -59,5 +58,4 @@ def nuagetennis():
     plt.title("Nuage de points des joueurs en fonction de leur taille et du nombre de points gagnés sur leur premier service")
     plt.xlabel("Taille en cm")
     plt.ylabel("Nombre de points gagnés sur le premier service")
-    plt.xticks(np.arange(160, 220, 10))
     plt.show()
